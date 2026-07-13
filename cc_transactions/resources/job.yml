@@ -1,0 +1,43 @@
+resources:
+  jobs:
+    cc_transactions_job:
+      # Job Name (shown in Databricks UI)
+      name: cc_transactions
+      # Maximum concurrent runs
+      max_concurrent_runs: 1
+      # Queue
+      queue:
+        enabled: true
+      # Timeout (seconds)
+      timeout_seconds: 600
+      # Retry
+      tasks:
+        - task_key: run_bronze_pipeline
+          notebook_task:
+            notebook_path: ../src/notebook.py
+          #existing_cluster_id: <YOUR_CLUSTER_ID>
+          timeout_seconds: 600
+          max_retries: 3
+          min_retry_interval_millis: 300000
+          retry_on_timeout: true
+      # Schedule
+      schedule:
+        quartz_cron_expression: "0 0 2 * * ?"
+        timezone_id: "Asia/Kolkata"
+        pause_status: PAUSED
+      # Parameters
+      parameters:
+        - name: catalog
+          default: cc_dev
+        - name: business_date
+          default: 2026-07-13
+        - name: load_type
+          default: FULL
+      # Notifications
+      email_notifications:
+        on_failure:
+          - mynepally.priyanka.db@gmail.com
+      # Permissions
+      permissions:
+        - level: CAN_MANAGE
+          group_name: priyanka

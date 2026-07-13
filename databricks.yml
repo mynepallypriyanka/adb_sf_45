@@ -1,0 +1,19 @@
+bundle:
+  name: cc_transactions_pipeline
+include:
+  - resources/*.yml
+variables:
+  catalog:
+    description: Catalog Name
+targets:
+  dev:
+    default: true
+    workspace:
+      host: https://dbc-36ae4e1a-9274.cloud.databricks.com/
+    variables:
+      catalog: cc_dev
+  prod:
+    workspace:
+      host: https://dbc-36ae4e1a-9274.cloud.databricks.com/
+    variables:
+      catalog: cc_prod
